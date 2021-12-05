@@ -12,28 +12,21 @@ jobs:
 
     steps:
     
-    - name: Install zip
-      uses: montudor/action-zip@v0.1.1
+    - name: Make publish directory folder
+      run: mkdir static-portal
+    
+    - name: Install node
+      uses: actions/setup-node@v2.5.0
       
     - uses: actions/checkout@v1
       name : checkout-repo
       id: checkout-repo  
       
-    - name: Zip files
-      run: zip -qq -r portal-input.zip .
+    - name: Install cli
+      run: npm i -g @apimatic/cli@1.0.1-alpha.6
       
-    - name: Call build endpoint
-      run: curl -X POST --url 'https://www.apimatic.io/api/portal' -H 'Authorization:X-Auth-Key ${{ secrets.API_KEY }}' -F 'file=@portal-input.zip' -o portal-output.zip
-      
-    - name: list 
-      run: ls
-      
-    - name: Extract generated Portal
-      run: unzip -qq portal-output.zip -d static-portal
-      
-    - name: list 
-      run: ls
-      
+    - name: Get portal 
+      run: apimatic portal:generate --folder ./ --destination ./static-portal      
 
     - name: Deploy to Netlify
       uses: nwtgck/actions-netlify@v1.2
