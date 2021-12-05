@@ -25,6 +25,9 @@ jobs:
     - name: Install cli
       run: npm i -g @apimatic/cli@1.0.1-alpha.6
       
+    - name: Login to APIMatic
+      run: apimatic login --auth-key {{ secrets.AUTH_TOKEN }}
+      
     - name: Get portal 
       run: apimatic portal:generate --folder ./ --destination ./static-portal      
 
